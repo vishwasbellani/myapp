@@ -4,10 +4,12 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/vishwasbellani/myapp.git' // Corrected syntax
+                script {
+                    git 'https://github.com/vishwasbellani/myapp.git'
+                }
             }
         }
-        stage('Build Docker Image') {  // Corrected from 'tages' to 'stage'
+        stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Building Docker image...'
@@ -18,8 +20,8 @@ pipeline {
         stage('Tag Docker Image') {
             steps {
                 script {
-                    // Tagging logic if necessary
-                    // app.tag("my-app:7") // Ensure this tag follows the naming convention
+                    // Uncomment and ensure this tag follows the naming convention if you want to tag
+                    // app.tag("my-app:7")
                 }
             }
         }
@@ -45,5 +47,5 @@ pipeline {
                 }
             }
         }
-    }  // Make sure all opening braces have a corresponding closing brace
+    } // Ensure all opening braces have a corresponding closing brace
 }
