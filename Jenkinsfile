@@ -10,9 +10,8 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
+                script { // Using script block for method calls
                     echo 'Building Docker image...'
-                    // Building the Docker image
                     def app = docker.build("my-app:latest") // Ensure this name is valid
                 }
             }
@@ -29,7 +28,8 @@ pipeline {
             steps {
                 script {
                     // Pushing the Docker image to the registry
-                    docker.withRegistry('https://us-central1-docker.pkg.dev', 'gcp-credentials') {
+                    docker.withRegistry('https://us-central1-docker.pkg.dev', 'gcp-credentials') { registry ->
+                        // Here, we use 'registry' as a closure parameter
                         docker.image("my-app:latest").push()
                         docker.image("my-app:${env.BUILD_ID}").push()
                     }
