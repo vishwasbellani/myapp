@@ -7,8 +7,7 @@ pipeline {
                 git 'https://github.com/vishwasbellani/myapp.git' // Corrected syntax
             }
         }
-       tages {
-        stage('Build Docker Image') {
+        stage('Build Docker Image') {  // Corrected from 'tages' to 'stage'
             steps {
                 script {
                     echo 'Building Docker image...'
@@ -46,5 +45,5 @@ pipeline {
                 }
             }
         }
-    }
+    }  // Make sure all opening braces have a corresponding closing brace
 }
