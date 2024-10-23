@@ -8,12 +8,14 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            steps {
-                script {
-                    def app = docker.build("my-app:${env.BUILD_ID}")
-                }
-            }
+    steps {
+        script {
+            echo "Building Docker image..."
+            sh 'docker info' // This will help confirm that Jenkins can communicate with Docker
+            def app = docker.build("my-app:${env.BUILD_ID}")
         }
+    }
+}
         stage('Tag Docker Image') {
             steps {
                 script {
