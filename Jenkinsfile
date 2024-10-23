@@ -29,8 +29,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://us-central1-docker.pkg.dev', 'gcp-credentials') {
-                        // Fix: Add closure parameter 'it' to reference the docker image object
-                        it.push() // This refers to "docker.image('my-app:${env.BUILD_ID}')"
+                        // Correctly reference the docker image
+                        docker.image("my-app:${env.BUILD_ID}").push()
                         docker.image("my-app:latest").push()
                     }
                 }
