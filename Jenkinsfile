@@ -7,19 +7,20 @@ pipeline {
                 git 'https://github.com/vishwasbellani/myapp.git' // Corrected syntax
             }
         }
+       tages {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "Building Docker image..."
-                    sh 'docker info' // This will help confirm that Jenkins can communicate with Docker
-                    def app = docker.build("my-app:${env.BUILD_ID}")
+                    echo 'Building Docker image...'
+                    def app = docker.build("my-app:latest") // Make sure this name is valid
                 }
             }
         }
         stage('Tag Docker Image') {
             steps {
                 script {
-                    docker.image("my-app:${env.BUILD_ID}").tag("my-app:latest")
+                    // Tagging logic if necessary
+                    // app.tag("my-app:7") // Ensure this tag follows the naming convention
                 }
             }
         }
