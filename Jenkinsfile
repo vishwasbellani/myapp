@@ -19,25 +19,18 @@ pipeline {
             steps {
                 echo 'Starting Building Docker Image'
                 sh 'docker build -t my-app .'
-                sh 'docker tag my-app gcr.io/vishwas24/my-app:latest'
+                sh 'docker tag my-app asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest'
                 echo 'Completed Building Docker Image'
             }
         }
 
-        stage('Docker Image Push to Google Container Registry') {
+        stage('Docker Image Push to Artifact Registry') {
             steps {
-                echo 'Pushing Docker Image to GCR: In Progress'
-                
-                // Use the withCredentials block to access the service account key
+                echo 'Pushing Docker Image to Artifact Registry: In Progress'
                 withCredentials([file(credentialsId: 'my-gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                    // Authenticate Docker with GCP
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
-                    
-                    // Set up Docker authentication
-                    sh 'gcloud auth configure-docker'
-                    
-                    // Push the Docker image
-                    sh 'docker push gcr.io/vishwas24/my-app:latest'
+                    sh 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
+                    sh 'docker push asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest'
                 }
             }
         }
