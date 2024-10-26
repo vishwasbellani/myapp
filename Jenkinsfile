@@ -9,9 +9,23 @@ pipeline {
     }
 
     stages {
+        stage('Checkout SCM') {
+            steps {
+                echo 'Checking out code from Git'
+                checkout scm
+            }
+        }
+
+        stage('List Workspace Contents') {
+            steps {
+                sh 'ls -la' // List the contents of the workspace
+            }
+        }
+
         stage('Code Compilation') {
             steps {
                 echo 'Code compilation is starting'
+                // Adjust the directory if the POM is not in the root
                 sh 'mvn clean compile'
                 echo 'Code compilation is completed'
             }
@@ -39,3 +53,4 @@ pipeline {
         }
     }
 }
+
