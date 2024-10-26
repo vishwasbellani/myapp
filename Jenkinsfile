@@ -18,7 +18,7 @@ pipeline {
 
         stage('List Workspace Contents') {
             steps {
-                sh 'ls -la' // List the contents of the workspace to check for pom.xml or Dockerfile
+                sh 'ls -la' // List the contents of the workspace to check for Dockerfile
             }
         }
 
@@ -35,6 +35,7 @@ pipeline {
             steps {
                 echo 'Pushing Docker Image to GCR: In Progress'
                 withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    // Authenticate with Google Cloud
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
                     sh 'gcloud auth configure-docker --quiet'
                 }
@@ -44,4 +45,3 @@ pipeline {
         }
     }
 }
-
