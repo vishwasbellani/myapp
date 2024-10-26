@@ -32,17 +32,17 @@ pipeline {
         }
 
         stage('Docker Image Push to Google Container Registry') {
-    steps {
-        echo 'Pushing Docker Image to GCR: In Progress'
-        script {
-            withCredentials([[$class: 'GoogleServiceAccountCredentials', credentialsId: 'gcp-service-account-key']]) {
-                sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
-                sh 'gcloud auth configure-docker --quiet'
-                sh "docker push ${GCR_URL}"
-            }
+            steps {
+                echo 'Pushing Docker Image to GCR: In Progress'
+                script {
+                    withCredentials([[$class: 'GoogleServiceAccountCredentials', credentialsId: 'gcp-service-account-key']]) {
+                        sh 'gcloud auth activate-service-account --key-file=/home/vishwasb/Downloads/vishwas24-3b33043c9677.json'
+                        sh 'gcloud auth configure-docker --quiet'
+                        sh "docker push ${GCR_URL}"
+                    }
+                }
+                echo 'Pushing Docker Image to GCR: Completed'
+            }      
         }
-        echo 'Pushing Docker Image to GCR: Completed'
-    }      
-}
     }
 }
