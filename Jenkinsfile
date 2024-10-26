@@ -38,7 +38,7 @@ pipeline {
             steps {
                 echo 'Deploying to Compute Engine Instance'
                 sh '''
-                gcloud compute ssh vishwas24@my-app --zone south-asia1 --command "
+                gcloud compute ssh vishwas24@my-app --zone asia-south1-a --command "
                     docker pull gcr.io/vishwas24/my-app:latest &&
                     docker run -d -p 80:80 gcr.io/vishwas24/my-app:latest
                     "
