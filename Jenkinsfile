@@ -18,7 +18,7 @@ pipeline {
 
         stage('List Workspace Contents') {
             steps {
-                sh 'ls -la' // List the contents of the workspace to check for Dockerfile
+                sh 'ls -la'
             }
         }
 
@@ -35,8 +35,7 @@ pipeline {
             steps {
                 echo 'Pushing Docker Image to GCR: In Progress'
                 script {
-                    withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                        sh 'gcloud auth activate-service-account --key-file=/home/vishwasb/Downloads/vishwas.json'
+                    withCredentials([googleServiceAccount(credentialsId: 'gcp-service-account-key')]) {
                         sh 'gcloud auth configure-docker --quiet'
                         sh "docker push ${GCR_URL}"
                     }
