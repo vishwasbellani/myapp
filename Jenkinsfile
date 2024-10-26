@@ -35,10 +35,10 @@ pipeline {
             steps {
                 echo 'Pushing Docker Image to GCR: In Progress'
                 script {
-                    withCredentials([googleServiceAccount(credentialsId: 'gcp-service-account-key')]) {
-                        sh 'gcloud auth configure-docker --quiet'
-                        sh "docker push ${GCR_URL}"
-                    }
+                    withCredentials([file(credentialsId: 'my-gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+    // Push Docker image to GCR
+    sh 'docker push gcr.io/vishwas24/my-app:latest'
+}
                 }
                 echo 'Pushing Docker Image to GCR: Completed'
             }
