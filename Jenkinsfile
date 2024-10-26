@@ -1,13 +1,5 @@
 pipeline {
-    agent any 
-
-    environment {
-        PROJECT_ID = 'vishwas24'
-        IMAGE_NAME = 'my-app'
-        IMAGE_TAG = 'latest'
-        GCR_URL = "gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${IMAGE_TAG}"
-    }
-
+    agent any
     stages {
         stage('Checkout SCM') {
             steps {
@@ -15,32 +7,26 @@ pipeline {
                 checkout scm
             }
         }
-
         stage('List Workspace Contents') {
             steps {
                 sh 'ls -la'
             }
         }
-
         stage('Building & Tagging Docker Image') {
             steps {
                 echo 'Starting Building Docker Image'
-                sh "docker build -t ${IMAGE_NAME} ."
-                sh "docker tag ${IMAGE_NAME} ${GCR_URL}"
+                sh 'docker build -t my-app .'
+                sh 'docker tag my-app gcr.io/vishwas24/my-app:latest'
                 echo 'Completed Building Docker Image'
             }
         }
-
         stage('Docker Image Push to Google Container Registry') {
             steps {
                 echo 'Pushing Docker Image to GCR: In Progress'
-                script {
-                    withCredentials([file(credentialsId: 'my-gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-    // Push Docker image to GCR
-    sh 'docker push gcr.io/vishwas24/my-app:latest'
-}
+                withCredentials([file(credentialsId: 'my-gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
+                    sh 'docker push gcr.io/vishwas24/my-app:latest'
                 }
-                echo 'Pushing Docker Image to GCR: Completed'
             }
         }
     }
