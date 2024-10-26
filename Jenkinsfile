@@ -18,16 +18,7 @@ pipeline {
 
         stage('List Workspace Contents') {
             steps {
-                sh 'ls -la' // List the contents of the workspace
-            }
-        }
-
-        stage('Code Compilation') {
-            steps {
-                echo 'Code compilation is starting'
-                // Adjust the directory if the POM is not in the root
-                sh 'mvn clean compile'
-                echo 'Code compilation is completed'
+                sh 'ls -la' // List the contents of the workspace to check for pom.xml or Dockerfile
             }
         }
 
