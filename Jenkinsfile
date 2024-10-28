@@ -38,13 +38,15 @@ pipeline {
         stage('Deploy to Compute Engine Instance') {
             steps {
                 script {
-                    // Command to stop the existing container, remove it, and run the updated image
+                    // Command to check if the container exists and then stop and remove it if it does
                     def deployCommand = '''
-                        docker stop 8352ceb48684 || true &&
-                        docker rm 8352ceb48684 || true &&
+                        if [ "$(docker ps -q -f name=my-app)" ]; then
+                            docker stop my-app &&
+                            docker rm my-app;
+                        fi &&
                         docker run -d --name my-app -p 80:80 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest
                     '''
-                    
+
                     // Execute the commands on the Compute Engine instance
                     sh "gcloud compute ssh vishwas24@my-app --zone asia-south1-c --command '${deployCommand}'"
                 }
@@ -52,4 +54,3 @@ pipeline {
         }
     }
 }
-
