@@ -39,12 +39,14 @@ pipeline {
     steps {
         script {
             def deployCommand = '''
-                if [ $(docker ps -aq -f name=my-app) ]; then
-                    docker stop my-app || true;
-                    docker rm my-app || true;
-                fi &&
-                docker run -d --name my-app -p 80:80 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest
-            '''
+    # Free up port 80 if it is already in use
+    sudo fuser -k 80/tcp || true
+    if [ $(docker ps -aq -f name=my-app) ]; then
+        docker stop my-app || true;
+        docker rm my-app || true;
+    fi &&
+    docker run -d --name my-app -p 80:80 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest
+'''
 
             sh "gcloud compute ssh vishwas24@my-app --zone asia-south1-c --command \"${deployCommand}\""
         }
