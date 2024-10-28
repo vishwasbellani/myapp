@@ -5,4 +5,4 @@ FROM nginx:alpine
 COPY index.html /usr/share/nginx/html/
 
 # Expose port 80
-EXPOSE 8o0
+EXPOSE 8o
