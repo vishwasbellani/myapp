@@ -36,16 +36,20 @@ pipeline {
         }
 
         stage('Deploy to Compute Engine Instance') {
-    steps {
-        script {
-            sh '''
-            gcloud compute ssh vishwas24@my-app --zone asia-south1-c --command "
-            gcloud auth configure-docker asia-south1-docker.pkg.dev &&
-            docker pull asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest &&
-            docker run -d -p 80:80 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest"
-            '''
+            steps {
+                script {
+                    // Command to stop the existing container, remove it, and run the updated image
+                    def deployCommand = '''
+                        docker stop 8352ceb48684 || true &&
+                        docker rm 8352ceb48684 || true &&
+                        docker run -d --name my-app -p 80:80 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest
+                    '''
+                    
+                    // Execute the commands on the Compute Engine instance
+                    sh "gcloud compute ssh vishwas24@my-app --zone asia-south1-c --command '${deployCommand}'"
+                }
+            }
         }
     }
 }
-    }
-}
+
