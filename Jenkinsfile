@@ -42,7 +42,7 @@ pipeline {
             gcloud compute ssh vishwas24@my-app --zone asia-south1-c --command "
             gcloud auth configure-docker asia-south1-docker.pkg.dev &&
             docker pull asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest &&
-            docker run -d -p 80:80 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest"
+            docker run -d -p 70:70 asia-south1-docker.pkg.dev/vishwas24/my-app/my-app:latest"
             '''
         }
     }
